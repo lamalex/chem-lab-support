@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { QRCode } from 'react-qr-svg';
+import QRCode from 'qrcode.react';
 
 function App() {
   const [url, setUrl] = useState('');
@@ -18,9 +18,10 @@ function App() {
     return (
       <QRCode
         className="App-logo"
-        bgColor="#D0D0D0"
+        bgColor="#FFFFFF"
         fgColor="#000000"
         level="L"
+        size="256"
         value={url}
       />
     );
