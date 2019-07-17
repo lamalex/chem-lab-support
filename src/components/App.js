@@ -14,9 +14,8 @@ function App() {
   };
 
   const onDownloadClick = e => {
-    const cvs = canvas.current.children[0];
-    console.log(cvs.toDataURL());
-    setDatablob(cvs.toDataURL());
+    const cvs = canvas.current.children.item(0);
+    if (cvs) setDatablob(cvs.toDataURL());
   };
 
   const renderDisabled = () => {
