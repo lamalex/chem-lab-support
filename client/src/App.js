@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import _ from 'underscore';
 
 import DataUploader from './DataUploader/DataUploader';
+import './ReactToggle.css';
 
 function App() {
   const serverUrlBase = 'http://localhost:8001/static';

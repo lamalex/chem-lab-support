@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import Toggle from 'react-toggle';
 import { Form, Input, Accordion, Icon } from 'semantic-ui-react';
 
 const OptionsDrawer = ({ onOptionsChange }) => {
   const [activeIndex, setActiveIndex] = useState(-1);
+  const [useInferred, setUseInferred] = useState(true);
   const [plotConfig, setPlotConfig] = useState({
     xmin: -0.1,
     xmax: 5000,
@@ -34,10 +36,21 @@ const OptionsDrawer = ({ onOptionsChange }) => {
       </Accordion.Title>
       <Accordion.Content active={activeIndex === 0}>
         <Form>
+          <Form.Field inline>
+            <Toggle
+              id="infer-vals"
+              defaultChecked={useInferred}
+              onChange={() => {
+                setUseInferred(!useInferred);
+              }}
+            />
+            <label htmlFor="infer-vals">Use values inferred from data</label>
+          </Form.Field>
           <Form.Group widths="equal">
             <Form.Field
               id="form-input-control-x-min"
               control={Input}
+              disabled={useInferred}
               type="number"
               label="X Axis Minimum"
               value={plotConfig.xmin}
@@ -48,6 +61,7 @@ const OptionsDrawer = ({ onOptionsChange }) => {
             <Form.Field
               id="form-input-control-x-max"
               control={Input}
+              disabled={useInferred}
               type="number"
               label="X Axis Maximum"
               value={plotConfig.xmax}
@@ -60,6 +74,7 @@ const OptionsDrawer = ({ onOptionsChange }) => {
             <Form.Field
               id="form-input-control-y-min"
               control={Input}
+              disabled={useInferred}
               type="number"
               label="Y Axis Minimum"
               value={plotConfig.ymin}
@@ -70,6 +85,7 @@ const OptionsDrawer = ({ onOptionsChange }) => {
             <Form.Field
               id="form-input-control-y-max"
               control={Input}
+              disabled={useInferred}
               type="number"
               label="Y Axis Maximum"
               value={plotConfig.ymax}
