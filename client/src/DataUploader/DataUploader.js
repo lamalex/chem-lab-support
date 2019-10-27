@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react';
 import _ from 'underscore';
 
 import axios from 'axios';
+import { ClipLoader } from 'react-spinners';
 import { useDropzone } from 'react-dropzone';
 import { Button } from 'semantic-ui-react';
 
@@ -12,6 +13,7 @@ import FileUploaderLabel from './FileUploaderLabel';
 import './DataUploader.css';
 
 const DataUploader = ({ onUploadFinished = null }) => {
+  const [loading, setLoading] = useState(false);
   const [datafilePath, setDatafilePath] = useState('');
   const [plotConfig, setPlotConfig] = useState({});
 
@@ -38,8 +40,10 @@ const DataUploader = ({ onUploadFinished = null }) => {
     e.preventDefault();
 
     if (acceptedFiles.length > 0) {
+      setLoading(true);
       uploadFile(acceptedFiles[0]).then(res => {
         if (onUploadFinished) onUploadFinished(res);
+        setLoading(false);
       });
     } else {
       console.log('THIS SHOULD NOT BE!');
@@ -78,6 +82,18 @@ const DataUploader = ({ onUploadFinished = null }) => {
   };
 
   const renderContent = () => {
+    if (loading) {
+      return (
+        <div>
+          <ClipLoader
+            sizeUnit={'px'}
+            size={150}
+            color={'#00ce66'}
+            loading={loading}
+          />
+        </div>
+      );
+    }
     return (
       <>
         <div {...getRootProps()}>
