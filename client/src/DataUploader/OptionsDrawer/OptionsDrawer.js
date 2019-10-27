@@ -13,11 +13,13 @@ const OptionsDrawer = ({ onOptionsChange }) => {
   });
 
   const onPlotConfigNumberChange = (option, value) => {
-    value = Number(value);
-    if (!isNaN(value)) {
-      const ncfg = { ...plotConfig, [option]: value };
+    const valueAsNumber = Number(value);
+    if (!isNaN(valueAsNumber)) {
+      const ncfg = { ...plotConfig, [option]: valueAsNumber };
       setPlotConfig(ncfg);
       onOptionsChange(ncfg);
+    } else if (option === null) {
+      onOptionsChange(value);
     }
   };
 
@@ -41,7 +43,13 @@ const OptionsDrawer = ({ onOptionsChange }) => {
               id="infer-vals"
               defaultChecked={useInferred}
               onChange={() => {
-                setUseInferred(!useInferred);
+                const newUseInferred = !useInferred;
+
+                setUseInferred(newUseInferred);
+                onPlotConfigNumberChange(
+                  null,
+                  newUseInferred ? {} : plotConfig
+                );
               }}
             />
             <label htmlFor="infer-vals">Use values inferred from data</label>
