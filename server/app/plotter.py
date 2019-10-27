@@ -3,12 +3,12 @@ import random
 import string
 import logging
 import itertools
+import pandas as pd
 import matplotlib
 matplotlib.use("Agg")
+import matplotlib.pyplot as plt
 import seaborn as sns
 sns.set(style='white', context='paper')
-import pandas as pd
-import matplotlib.pyplot as plt
 
 AXIS_TOLERANCE = 0.1
 
