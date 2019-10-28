@@ -70,7 +70,7 @@ def plot_from_csv(file_handle, plotConfig):
         plt.close(fig)
         randomChars = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(8)])
         filename = "{}.{}.png".format(compound_name, randomChars)
-        fig.savefig('static/plots/{}'.format(filename), dpi=300, metadata={
+        fig.savefig('/tmp/pilates/plots/{}'.format(filename), dpi=300, metadata={
             'software': 'excited_pilates.py',
             'comment': 'DREAM BIG, FIGHT HARD. WARREN 2020'
         })

@@ -5,7 +5,7 @@ import DataUploader from './DataUploader/DataUploader';
 import './ReactToggle.css';
 
 function App() {
-  const serverUrlBase = 'http://localhost:8001/static';
+  const serverUrlBase = 'http://localhost:8000/static';
 
   const [plots, setPlots] = useState([]);
 

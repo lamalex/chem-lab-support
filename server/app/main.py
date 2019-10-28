@@ -61,5 +61,6 @@ async def create_app():
         static_root_url='/static/',
     )
 
-    app.router.add_post('/upload', handle_csv_submission)
+    app.router.add_get('/api/', lambda x: web.json_response({'reply': 'hello'}))
+    app.router.add_post('/api/upload', handle_csv_submission)
     return app

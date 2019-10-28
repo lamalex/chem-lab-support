@@ -18,7 +18,7 @@ const DataUploader = ({ onUploadFinished = null }) => {
   const [plotConfig, setPlotConfig] = useState({});
 
   const uploadFile = file => {
-    const url = 'http://localhost:8000/upload';
+    const url = 'http://localhost:8000/api/upload';
     const formdata = new FormData();
     formdata.append('plotConfig', JSON.stringify(plotConfig));
     formdata.append('file', file);

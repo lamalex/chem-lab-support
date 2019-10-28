@@ -1,0 +1,25 @@
+version: '3.2'
+
+services:
+  proxy:
+    build: ./resources
+    links:
+      - pilatesserver:pilatesserver
+      - pilatesclient:pilatesclient
+    ports:
+      - '8000:80'
+    volumes:
+      - '/tmp/pilates/plots:/var/www/plots'
+
+  pilatesserver:
+    build: ./server
+    command: gunicorn app.main:create_app -b :8080 --worker-class aiohttp.GunicornWebWorker --reload
+    ports:
+      - '8080:8080'
+    volumes:
+      - '/tmp/pilates/plots:/tmp/pilates/plots'
+
+  pilatesclient:
+    build: ./client
+    ports:
+      - '3000:3000'
