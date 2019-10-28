@@ -118,7 +118,9 @@ const DataUploader = ({ onUploadFinished = null }) => {
     );
   };
 
-  return <RoundedBox className="container">{renderContent()}</RoundedBox>;
+  return (
+    <RoundedBox className="upload-container">{renderContent()}</RoundedBox>
+  );
 };
 
 export default DataUploader;

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import _ from 'underscore';
+import { Segment } from 'semantic-ui-react';
 
 import DataUploader from './DataUploader/DataUploader';
 import './ReactToggle.css';
@@ -17,14 +18,14 @@ function App() {
   const renderPlots = () => {
     return _.map(plots, (plot, i) => {
       return (
-        <div key={i} className="ui center aligned raised segment">
+        <Segment key={i} padded="very">
           <h2>{plot}</h2>
           <img
             className="ui image"
             src={`${serverUrlBase}${plot}`}
             alt={plot}
           ></img>
-        </div>
+        </Segment>
       );
     });
   };
@@ -32,7 +33,7 @@ function App() {
   return (
     <div>
       <DataUploader onUploadFinished={onUploadFinished} />
-      <div>{renderPlots()}</div>
+      <div className="ui container">{renderPlots()}</div>
     </div>
   );
 }
