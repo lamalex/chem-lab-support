@@ -8,14 +8,30 @@ import './ReactToggle.css';
 function App() {
   const serverUrlBase = 'http://localhost:8000/static';
 
+  const [error, setError] = useState(null);
   const [plots, setPlots] = useState([]);
 
   const onUploadFinished = ({ data }) => {
     const { images } = data;
+    setError(null);
     setPlots(images);
   };
 
+  const onUploadError = err => {
+    setError(err);
+  };
+
   const renderPlots = () => {
+    if (error) {
+      return (
+        <Segment padded="very">
+          <h1>
+            I'm really sorry but something has gone <u>horribly</u> wrong
+          </h1>
+          <span>Whoopsie!</span>
+        </Segment>
+      );
+    }
     return _.map(plots, (plot, i) => {
       return (
         <Segment key={i} padded="very">
@@ -32,7 +48,10 @@ function App() {
 
   return (
     <div>
-      <DataUploader onUploadFinished={onUploadFinished} />
+      <DataUploader
+        onUploadFinished={onUploadFinished}
+        onError={onUploadError}
+      />
       <div className="ui container">{renderPlots()}</div>
     </div>
   );

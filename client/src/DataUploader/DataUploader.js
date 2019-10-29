@@ -12,9 +12,9 @@ import FileUploaderLabel from './FileUploaderLabel';
 
 import './DataUploader.css';
 
-const DataUploader = ({ onUploadFinished = null }) => {
+const DataUploader = ({ onUploadFinished = null, onError = null }) => {
+  const [acceptedFile, setAcceptedFile] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [datafilePath, setDatafilePath] = useState('');
   const [plotConfig, setPlotConfig] = useState({});
 
   const uploadFile = file => {
@@ -39,12 +39,19 @@ const DataUploader = ({ onUploadFinished = null }) => {
   const onFormSubmit = e => {
     e.preventDefault();
 
-    if (acceptedFiles.length > 0) {
+    if (acceptedFile) {
       setLoading(true);
-      uploadFile(acceptedFiles[0]).then(res => {
-        if (onUploadFinished) onUploadFinished(res);
-        setLoading(false);
-      });
+      uploadFile(acceptedFile)
+        .then(res => {
+          if (onUploadFinished) onUploadFinished(res);
+        })
+        .catch(err => {
+          if (onError) onError(err);
+        })
+        .finally(() => {
+          setLoading(false);
+          setAcceptedFile(null);
+        });
     } else {
       console.log('THIS SHOULD NOT BE!');
     }
@@ -56,7 +63,7 @@ const DataUploader = ({ onUploadFinished = null }) => {
     });
 
     if (firstCsv) {
-      setDatafilePath(firstCsv.path);
+      setAcceptedFile(firstCsv);
     }
   }, []);
 
@@ -64,8 +71,7 @@ const DataUploader = ({ onUploadFinished = null }) => {
     isDragActive,
     getRootProps,
     getInputProps,
-    isDragReject,
-    acceptedFiles
+    isDragReject
   } = useDropzone({
     onDrop,
     accept: 'text/csv',
@@ -75,7 +81,7 @@ const DataUploader = ({ onUploadFinished = null }) => {
 
   const renderDropLabel = () => {
     let labelText = 'Drop a .csv here to upload';
-    if (isDragActive && !isDragReject && acceptedFiles.length === 0)
+    if (isDragActive && !isDragReject && !acceptedFile)
       labelText = 'Drop that dern .csv right here';
     else if (isDragReject) labelText = 'Oh dang. CSVs only, please';
     return <FileUploaderLabel labelText={labelText} />;
@@ -108,7 +114,7 @@ const DataUploader = ({ onUploadFinished = null }) => {
             color="pink"
             size="big"
             onClick={onFormSubmit}
-            disabled={datafilePath === ''}
+            disabled={acceptedFile === null}
           >
             Plot my data
           </Button>
