@@ -1,7 +1,7 @@
 #!/bin/bash -l
 
-#SBATCH --job-name=test
-#SBATCH --output=output.txt
+#SBATCH --job-name=corr2d
+#SBATCH --output=corr2d.slurm.out
 
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
@@ -26,3 +26,5 @@ what is inside?
 EOF
 
 ls -l "$SLURM_SUBMIT_DIR"
+
+Rscript simple_2dcorr.r Replicate1_PhotoVanillin_1DNMR.csv Replicate2_PhotoVanillin_1DNMR.csv

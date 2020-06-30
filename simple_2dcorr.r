@@ -16,12 +16,6 @@ load_csv_to_matrix <- function(file_path) {
     return(data.matrix(csv, rownames.force = NA))
 }
 
-cleanup <- function() {
-    rm("mat1")
-    rm("mat2")
-    gc()
-}
-
 main <- function() {
     args <- parse_args(commandArgs(trailingOnly = TRUE))
     mat1 = load_csv_to_matrix(args$file1)
@@ -30,8 +24,6 @@ main <- function() {
     library("stringr")
     library("corr2D")
     twod <- corr2d(mat1, mat2, corenumber = parallel::detectCores())
-    
-    cleanup()
     
     pdf(str_interp("corr2d-${Sys.time()}.pdf"))
     plot_corr2d(twod, N = args$contour)
