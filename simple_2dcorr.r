@@ -6,7 +6,7 @@ parse_args <- function(args) {
         quit(save = "no", status = 69)
     }
     
-    contour <- ifelse(is.na(args[3]), DEFAULT_CONTOUR, args[3])
+    contour <- ifelse(is.na(args[3]), DEFAULT_CONTOUR, as.numeric(args[3]))
     parsed <- list("file1" = args[1], "file2" = args[2], "contour" = contour)
     return(parsed)
 }
