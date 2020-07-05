@@ -209,21 +209,23 @@ main <- function() {
     library("corr2D")
     library("stringr")
     library("argparser", quietly = TRUE)
-
+    output_opts = c("pdf", "svg", "png", "jpeg")
     p <- arg_parser("2D correlation")
     p <- add_argument(p, "file1", help = "data file 1")
     p <- add_argument(p, "file2", help = "data file 2")
     p <- add_argument(p, "--N", help = "Contour level", default = 32, type = "numeric")
     p <- add_argument(p, "--async", help = "Generate asyncronous plot", flag = TRUE)
+    p <- add_argument(p, "--outputtype", help = "Output file type. Default is pdf", default = "pdf")
     args <- parse_args(p)
 
     type <- ifelse(args$async, Im, Re)
+    output <- eval(parse(text = grep(args$outputtype, output_opts, value = TRUE)))
 
     mat1 <- load_csv_to_matrix(args$file1)
     mat2 <- load_csv_to_matrix(args$file2)
     twod <- corr2d(mat1, mat2, corenumber = parallel::detectCores())
     
-    pdf(str_replace(str_interp("corr2d-${Sys.time()}-${ifelse(args$async, 'async', 'sync')}.pdf"), " ", ""))
+    output(str_replace(str_interp("corr2d-${Sys.time()}-${ifelse(args$async, 'async', 'sync')}.${args$outputtype}"), " ", ""))
     plot_corr2d_custom(twod, what = type(twod$FT), N = args$N, xlab = "ppm", ylab="ppm")
     dev.off()
 }
