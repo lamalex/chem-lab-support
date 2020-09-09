@@ -4,7 +4,7 @@ load_csv_to_matrix <- function(file_path) {
 }
 
 plot_corr2d_custom <-
-    function(Obj, what = Re(Obj$FT), specx = rev(Obj$Ref1), specy = Obj$Ref2,
+    function(Obj, what = Re(Obj$FT), specx = Obj$Ref1, specy = Obj$Ref2,
              xlim = NULL, ylim = NULL,
              xlab = expression(nu[1]), ylab = expression(nu[2]),
              Contour = TRUE, axes = 3, Legend = TRUE, N = 20,
@@ -86,10 +86,10 @@ plot_corr2d_custom <-
         
         # create splitscreen for plotting -------------------------------------
         OFF <- 0.05
-        split.screen(rbind(c(0, 0.15 + OFF, 0.15 + OFF, 0.85 - OFF),          # left
+        split.screen(rbind(c(0, 0.15 + OFF, 0.15 + OFF, 0.85 - OFF),          # Spectrum left
                            c(0.15 + OFF, 0.85 - OFF, 0.85 - OFF, 1),          # Spectrum top
                            c(0.15 + OFF, 0.85 - OFF, 0.15 + OFF, 0.85 - OFF), # Main
-                           c(0.85 - OFF, 1, 0.15 + OFF, 0.85 - OFF),          # Spectrum Right
+                           c(0.85 - OFF, 1, 0.15 + OFF, 0.85 - OFF),          # right
                            c(0.15 + OFF, 0.85 - OFF, 0, 0.15 + OFF),          # bottom
                            c(0, 0.15 + OFF, 0.85 - OFF, 1),                   # top left
                            c(0.85 - OFF, 1, 0.85 - OFF, 1)                    # Legend top right
@@ -98,21 +98,18 @@ plot_corr2d_custom <-
         
         # plot one dimensional spectra top and left ---------------------------
         if (!is.null(specy)) {
-            # Spec right -------------------------------------------------------
+            # Spec left -------------------------------------------------------
             screen(1)
-            x = max(specy[Which2]) - specy[Which2]
             par(xaxt = "n", yaxt = "n", mar = c(0, 0, 0, 0), bty = "n", yaxs = "i")
-            plot(x = x, y = Obj$Wave2[Which2], 
-                 col = graphparm$col, type = "l", lwd = lwd.spec, ann = FALSE, 
-                 xlim = range(x)
-            )
+            plot(x = max(specy[Which2]) - specy[Which2], y = Obj$Wave2[Which2], 
+                 col = graphparm$col, type = "l", lwd = lwd.spec, ann = FALSE)
         }
         
         if (!is.null(specx)) {
             # Spec top -------------------------------------------------------
             screen(2)
             par(xaxt = "n", yaxt = "n", mar = c(0, 0, 0, 0), bty = "n", xaxs = "i")
-            plot(x = Obj$Wave1[Which1], y = specx[Which1],
+            plot(x = rev(Obj$Wave1[Which1]), y = specx[Which1],
                  col = graphparm$col, type = "l", lwd = lwd.spec, ann = FALSE)
         }
         
@@ -121,7 +118,7 @@ plot_corr2d_custom <-
         if (is.null(zlim)) {
             zlim <- range(what[Which1, Which2])
         }
-        # Number oxf levels is always odd --------------------------------------
+        # Number of levels is always odd --------------------------------------
         if (N%%2 == 0){
             N <- N + 1
         }
@@ -143,16 +140,15 @@ plot_corr2d_custom <-
         COL <- COL[which(zlim[1] < Where & Where < zlim[2])]
         Where <- seq(zlim[1], zlim[2], length.out = length(COL))
         
-        xlim <- rev(c(min(Obj$Wave1[Which1]), max(Obj$Wave1[Which1])))
         par(xaxt = "n", yaxt = "n", mar = c(0, 0, 0, 0), bty = "n", xaxs = "i", yaxs = "i")
         if (Contour == TRUE){
             graphics::contour(x = Obj$Wave1[Which1], y = Obj$Wave2[Which2], z = what[Which1, Which2],
-                              col = COL, levels = Where, zlim = zlim, drawlabels = FALSE, xlim = xlim,
-                              lwd = graphparm$lwd, ...)
+                              col = COL, levels = Where, zlim = zlim, drawlabels = FALSE,
+                              lwd = graphparm$lwd, xlim = rev(xlim),...)
         } else {
             graphics::image(x = Obj$Wave1[Which1], y = Obj$Wave2[Which2], z = what[Which1, Which2],
-                            col = COL, xlab = "", ylab = "", zlim = zlim, xlim = rev(c(0,10)),
-                            lwd = graphparm$lwd, ...)
+                            col = COL, xlab = "", ylab = "", zlim = zlim,
+                            lwd = graphparm$lwd, xlim = rev(xlim),...)
         }
         
         abline(a = 0, b = 1, col = rgb(red = 1, green = 1, blue = 1, alpha = 0.5),
