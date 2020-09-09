@@ -4,7 +4,7 @@ load_csv_to_matrix <- function(file_path) {
 }
 
 plot_corr2d_custom <-
-    function(Obj, what = Re(Obj$FT), specx = Obj$Ref1, specy = Obj$Ref2,
+    function(Obj, what = Re(Obj$FT), specx = rev(Obj$Ref1), specy = Obj$Ref2,
              xlim = NULL, ylim = NULL,
              xlab = expression(nu[1]), ylab = expression(nu[2]),
              Contour = TRUE, axes = 3, Legend = TRUE, N = 20,
@@ -99,12 +99,12 @@ plot_corr2d_custom <-
         # plot one dimensional spectra top and left ---------------------------
         if (!is.null(specy)) {
             # Spec right -------------------------------------------------------
-            screen(4)
+            screen(1)
             x = max(specy[Which2]) - specy[Which2]
             par(xaxt = "n", yaxt = "n", mar = c(0, 0, 0, 0), bty = "n", yaxs = "i")
             plot(x = x, y = Obj$Wave2[Which2], 
                  col = graphparm$col, type = "l", lwd = lwd.spec, ann = FALSE, 
-                 xlim = rev(range(x))
+                 xlim = range(x)
             )
         }
         
@@ -143,14 +143,15 @@ plot_corr2d_custom <-
         COL <- COL[which(zlim[1] < Where & Where < zlim[2])]
         Where <- seq(zlim[1], zlim[2], length.out = length(COL))
         
+        xlim <- rev(c(min(Obj$Wave1[Which1]), max(Obj$Wave1[Which1])))
         par(xaxt = "n", yaxt = "n", mar = c(0, 0, 0, 0), bty = "n", xaxs = "i", yaxs = "i")
         if (Contour == TRUE){
             graphics::contour(x = Obj$Wave1[Which1], y = Obj$Wave2[Which2], z = what[Which1, Which2],
-                              col = COL, levels = Where, zlim = zlim, drawlabels = FALSE,
+                              col = COL, levels = Where, zlim = zlim, drawlabels = FALSE, xlim = xlim,
                               lwd = graphparm$lwd, ...)
         } else {
             graphics::image(x = Obj$Wave1[Which1], y = Obj$Wave2[Which2], z = what[Which1, Which2],
-                            col = COL, xlab = "", ylab = "", zlim = zlim,
+                            col = COL, xlab = "", ylab = "", zlim = zlim, xlim = rev(c(0,10)),
                             lwd = graphparm$lwd, ...)
         }
         
@@ -166,7 +167,7 @@ plot_corr2d_custom <-
                  font.axis = graphparm$font.axis)
         }
         if ((axes == 2) | (axes == 3)){
-            axis(side = 2, las = 2, at = at.yaxs, labels = label.yaxs,
+            axis(side = 4, las = 2, at = at.yaxs, labels = label.yaxs,
                  lwd = lwd.axis, col = graphparm$col, col.ticks = graphparm$col,
                  cex.axis = graphparm$cex.axis, col.axis = graphparm$col.axis,
                  font.axis = graphparm$font.axis)
@@ -174,7 +175,7 @@ plot_corr2d_custom <-
         
         mtext(side = 1, xlab, line = line.xlab, cex = graphparm$cex.lab * 1.3,
               col = graphparm$col.lab, font = graphparm$font.lab)
-        mtext(side = 2, ylab, line = line.ylab, cex = graphparm$cex.lab * 1.3,
+        mtext(side = 4, ylab, line = line.ylab, cex = graphparm$cex.lab * 1.3,
               col = graphparm$col.lab, font = graphparm$font.lab)
         
         if(Legend == TRUE){
