@@ -8,6 +8,12 @@ from scipy.optimize import curve_fit
 import seaborn as sns
 import matplotlib.pyplot as plt
 
+"""
+Run like python fit.py <path to csv>
+Update X_COL_LABEL/Y_COL_LABEL to match columns if needed
+"""
+
+
 def model_func(t, c1, c2, k1, k2):
     return c1 * np.exp(-k1*t) + c2 * np.exp(-k2 * t)
 
